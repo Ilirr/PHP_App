@@ -2,55 +2,55 @@
 <html>
 
 <head>
-    <title>Observationsystem</title>
+    <title>Observationssystem</title>
 
     <style>
         .left {
             float: left;
             width: 50%;
-            /* Adjust the width as needed */
         }
 
         .right {
             float: right;
             width: 50%;
-            /* Adjust the width as needed */
         }
     </style>
 </head>
 
 <body>
-    <h1>Observationsystem</h1>
+    <h1>Observationssystem</h1>
     <table border=1>
         <?php require_once 'database.php';
         session_start();
-        ?>
 
-        <?php
+        
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: login.php'); 
+            exit;
+        }
+
         $sql = 'SELECT id, säkerhet FROM Observation';
         $sth = $pdo->prepare($sql);
         $sth->execute();
         $observationer = $sth->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($observationer as $observation) {
-            $obsID = $observation['id'];
+            $obsID = $observation['id'];    
             $obsSkh = $observation['säkerhet'];
 
             echo "<a href='update_data.php?id=$obsID'> Observation $obsID: Add +10 to säkerhet  Current: $obsSkh</a><br>";
         }
 
 
-        // SQL query to retrieve all observations
         $sql = "SELECT * FROM Observation";
 
         $result = $pdo->query($sql);
 
         if (!empty($result)) {
-            echo "<h2>All Observations:</h2>";
+            echo "<h3>All Observations:</h3>";
             echo "<table border='1'>";
             echo "<tr><th>ID</th><th>Media Namn</th><th>Kvalite</th><th>Datum</th><th>Grad</th><th>Säkerhet</th></tr>";
-            
-            // Loop through the results and display each observation
+
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 echo "<tr>";
                 echo "<td>{$row['id']}</td>";
@@ -61,7 +61,6 @@
                 echo "<td>{$row['säkerhet']}</td>";
                 echo "</tr>";
             }
-            
             echo "</table>";
         } else {
             echo "No observations found.";
@@ -72,25 +71,34 @@
         $result = $pdo->query($sql);
 
         if (!empty($result)) {
-            echo "<h2>All Observation_Person tables:</h2>";
+            echo "<h3>All Observation_Person tables:</h3>";
             echo "<table border='1'>";
             echo "</tr><th>Person ID</th><th>Observation ID<th></th>";
-            
-            // Loop through the results and display each observation
+
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 echo "<tr>";
-                echo "<td>{$row['id']}</td>";
-                echo "<td>{$row['media_namn']}</td>";
-                echo "<td>{$row['kvalite']}</td>";
-                echo "<td>{$row['datum']}</td>";
-                echo "<td>{$row['grad']}</td>";
-                echo "<td>{$row['säkerhet']}</td>";
+                echo "<td>{$row['person_id']}</td>";
+                echo "<td>{$row['observation_id']}</td>";
                 echo "</tr>";
             }
             echo "</table>";
         } else {
             echo "No tables found.";
         }
+
+
+        echo "<h3>Person list</h3>";
+        $sql = "SELECT id, namn FROM Person";
+        $sql = $pdo->query($sql);
+
+        echo "<select name='dropdown'>";
+        while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+
+            echo "<option value='{$row['id']}'>{$row['namn']}</option>";
+
+        }
+        echo "</select>";
+
         ?>
 
         <form method="post" action="execute_procedure.php">
@@ -100,8 +108,18 @@
                 <option value="Alla_Observationer_Vertikal">Alla_Observationer_Vertikal</option>
             </select>
             <input type="submit" value="Execute">
-
         </form>
+
+
+        <body>
+            <h3>Find Observation by Date</h3>
+            <form method="POST" action="procedure_param.php">
+                <label for="name">Enter Date:</label>
+                <input type="date" name="date">
+                <input type="hidden" name="submit">
+                <input type="submit" value="Submit" />
+            </form>
+        </body>
 
 
         <form method="post" action="search_data.php">
@@ -116,7 +134,7 @@
         </form>
 
 
-        <h1>Add an Observation</h1>
+        <h3>Add an Observation</h3>
         <form method="post" action="add_data.php">
             <label>Observation</label><br>
             ID: <input type="number" name="id"><br>
@@ -131,7 +149,7 @@
 
 
 
-        <h1>Current User</h1>
+        <h3>Current User</h3>
         <form method="post" action="logout.php">
             <?php echo $_SESSION['user_id'] . ' is logged in'; ?>
             <input type="submit" value="Logout">

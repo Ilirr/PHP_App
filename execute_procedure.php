@@ -3,12 +3,12 @@
 try {
 
     $procedure = $_POST['procedure'];
-    $stmt = $pdo->prepare("CALL $procedure()");
+    $sql = $pdo->prepare("CALL $procedure()");
 
-    $stmt->execute();
+    $sql->execute();
 
 
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $results = $sql->fetchAll(PDO::FETCH_ASSOC);
 
     if (!empty($results)) {
         foreach ($results as $row) {

@@ -9,11 +9,16 @@
         
         $sth->bindParam(':id', $obsID, PDO::PARAM_INT);
         
-        // Utför SQL-frågan
-        if ($sth->execute()) {
-            echo "Trovärdigheten har ändrats för datbaasen.";
-        } else {
-            echo "Ett fel inträffade vid borttagning av produkten.";
+        try
+        {
+            $sth->execute();
+            echo "Säkerheten har ändrats för observationen.";
         }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+
+        }
+       
     }
 ?>

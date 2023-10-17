@@ -1,5 +1,4 @@
 <?php
-
 require_once 'database.php';
 session_start();
 try {
@@ -10,12 +9,12 @@ try {
         $inputPassword = $_POST['password'];
         
         $query = "SELECT * FROM users WHERE username = :username AND password = :password";
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':username', $inputUsername);
-        $stmt->bindParam(':password', $inputPassword);
-        $stmt->execute();
+        $sql = $pdo->prepare($query);
+        $sql->bindParam(':username', $inputUsername);
+        $sql->bindParam(':password', $inputPassword);
+        $sql->execute();
 
-        if ($stmt->rowCount() > 0) {
+        if ($sql->rowCount() > 0) {
             $_SESSION['user_id'] = $inputUsername;
             header('Location: MyApp.php');
             
@@ -23,12 +22,6 @@ try {
         } else {
             echo 'Invalid login information';
 
-        }
-
-        if (isset($_SESSION['user_id'])) {
-            // You can handle the case where the user is already logged in here
-            // For example, display a different message or redirect to another page
-            echo $_SESSION['user_id'] .  'Already logged in ';
         }
     }
 } catch (PDOException $e) {

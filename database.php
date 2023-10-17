@@ -1,6 +1,6 @@
 <?php
-$host = 'localhost'; // Change to your MySQL server host
-$database = 'a22iliru'; // Change to your database name
+$host = 'localhost';
+$database = 'a22iliru'; 
 $username = 'OBSERVATÖR';
 $password = 'password';
 

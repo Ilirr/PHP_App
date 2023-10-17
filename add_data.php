@@ -3,8 +3,6 @@
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-
-
     $id = $_POST["id"];
     $datum = $_POST["datum"];
     $media_namn = $_POST["media_namn"];
@@ -20,10 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if($count == 0)
     {
-        $query = "INSERT INTO Observation (id, media_namn, kvalite, datum, grad, säkerhet)
+        $sql = "INSERT INTO Observation (id, media_namn, kvalite, datum, grad, säkerhet)
         VALUES ('$id', '$media_namn', '$kvalite', '$datum', '$grad', '$säkerhet')";
 
-        $sth = $pdo->prepare($query);
+        $sth = $pdo->prepare($sql);
 
         if ($sth->execute())
         {
@@ -31,16 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } 
         else 
         {
-            echo "Error";
+            echo "Error adding observation";
         }
 
     }
-    else{
+    else
+    {
         echo "There is already an observation with same ID";
     }
 
 
 }
-
-
 ?>

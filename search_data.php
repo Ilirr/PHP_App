@@ -3,13 +3,11 @@
 
     $selectedKvalite = $_POST["kvalite"];
     
-    // Prepare and execute a SQL query to fetch data
-    $stmt = $pdo->prepare("SELECT * FROM Observation WHERE kvalite = :kvalite");
-    $stmt->bindParam(":kvalite", $selectedKvalite, PDO::PARAM_STR);
-    $stmt->execute();
+    $sql = $pdo->prepare("SELECT * FROM Observation WHERE kvalite = :kvalite");
+    $sql->bindParam(":kvalite", $selectedKvalite, PDO::PARAM_STR);
+    $sql->execute();
     
-    // Fetch and display the results
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $results = $sql->fetchAll(PDO::FETCH_ASSOC);
     
     if (!empty($results)) 
     {
